@@ -1,0 +1,302 @@
+# Public Story API GraphQL Schema
+
+schema {
+  query: Query
+}
+
+
+# Geographic position input type.
+input GeoPointInput {
+    # Latitude in degrees.
+    latitude: Float!
+    # Longitude in degrees.
+    longitude: Float!
+}
+
+# Geographic circular area input type.
+input GeoCircleInput {
+    #Center of the circle.
+    center: GeoPointInput!
+    # Radius in meters.
+    radius_in_meters: Float!
+}
+
+# Geographic polygon area input type.
+input GeoPolygonInput {
+    # Geo polygon vertices in clockwise order. The first and last vertex in the
+    # coordinates should be the same to enclose a polygon.
+    coordinates: [GeoPointInput]!
+}
+
+# Geographic area input type defined by southwestern and northeastern points.
+input GeoBoundingBoxInput {
+    # Southwest geo point.
+    sw_point: GeoPointInput!
+    # Northeast geo point.
+    ne_point: GeoPointInput!
+}
+
+# Content filter type
+enum ContentFilterType {
+    # Finds Stories containing the terms in any field.
+    ANY
+    # Finds Stories containing the terms in the Snap's caption.
+    CAPTION
+    # Finds Stories containing terms in a display name or official username.
+    USER
+    # Finds Stories containing terms in fields related to location name
+    # (example: city name or country code).
+    LOCATION
+}
+
+# Keyword of named source filter input type.
+input ContentFilterInput {
+    type: ContentFilterType!
+    keyword: String!
+}
+
+# Time range filter input type.
+input TimeRangeFilterInput {
+    # Start time in epoch seconds.
+    min_timestamp_secs: Int!
+    # End time in epoch seconds.
+    max_timestamp_secs: Int!
+}
+
+
+# Media types.
+enum MediaType {
+    UNSET
+    IMAGE
+    VIDEO
+}
+
+# Media orientation.
+enum OrientationType {
+    UNSET
+    PORTRAIT
+    LANDSCAPE
+}
+
+# Media camera position.
+enum CameraPositionType {
+    UNSET
+    REAR_FACING
+    FRONT_FACING
+}
+
+# Media format filter input type.
+input MediaFormatFilterInput {
+    media_type :MediaType!
+    orientation_type: OrientationType!
+    facing_type: CameraPositionType!
+}
+
+# Media information.
+type Media {
+    media_type: MediaType!
+    orientation_type: OrientationType!
+    camera_position: CameraPositionType!
+    # URL for downloading media content. For image, use jpg or png. For video, use mp4.
+    media_url: String!
+    # URL for downloading overlay image.
+    overlay_image_url: String!
+    # URL for downloading the first frame of video content. This field is not
+    # applicable for images.
+    media_preview_url: String!
+    # Duration of the Snap video in seconds. This field is not applicable for images.
+    duration_secs: Int!
+}
+
+type SnapAttributionInfo {
+    # Display name of the person who created the Snap.
+    display_name: String!
+    # Emoji of the person who created the Snap.
+    emoji: String!
+}
+
+type Snap {
+    # Unique Snap ID from backend.
+    id: String!
+    # Information to display on the Snap (example: city and state). Single line
+    # formatted optional.
+    title: String!
+    # The capture time of the snap in epoch seconds.
+    capture_time_secs: Int!
+    # Snap expiration time.
+    expiration_time_secs: Int!
+    # Snap embed url.
+    embed_url: String!
+    # Media of this Snap.
+    media: Media!
+    # The URL attached to the Snap if one exists.
+    attachment_url: String!
+    # Snap attribution information. Only populated for certain Snaps.
+    attribution_info: SnapAttributionInfo!
+}
+
+# The returned results are ordered by the specified orderType and paginated.
+type SearchSnapsResults {
+    # The list of Snaps returned. The list can be empty when no Snaps are
+    # available.
+    snaps: [Snap]!
+    # nextSnapOffset denotes where to start to fetch the next page with current
+    # search criteria. A nextSnapOffset of value -1 indicates there is no more
+    # record after the last Snap returned in this call.
+    nextSnapOffset: Int!
+}
+
+
+# Story type.
+enum StoryType {
+    UNKNOWN
+    DISCOVER_FEED
+    USER_STORY
+}
+
+# Geographic position.
+type GeoPoint {
+    # Latitude in degrees.
+    latitude: Float!
+    # Longitude in degrees.
+    longitude: Float!
+}
+
+type StoryMetadata {
+    # Story type.
+    story_type: StoryType!
+    # Story title to display with the story thumbnail. Single line, formatted,
+    # localized string.
+    title: String!
+    # Subtitles shown together with the title as additional information, e.g.,
+    # city name, time, distance, volume. Each subtitle is a single line
+    # formatted, localized string. Optional.
+    sub_titles: [String]!
+    # Emoji of the story.
+    emoji: String!
+    # Story timestamp to display on the UI.
+    display_timestamp_secs : Int!
+    # Image thumbnail. Media type is IMAGE.
+    image_thumbnail: Media!
+    # Video thumbnail. Media type is VIDEO_NO_SOUND. Optional.
+    video_thumbnail: Media!
+    # The weighted centroid geo point of the story. This might not be meaningful
+    # for certain types of Stories, e.g. truly global topic Stories.
+    location: GeoPoint!
+    # Place information where the story is happening.
+    placeNames: [String]!
+}
+
+# A story is a list of snaps and metadata.
+type Story {
+    # Unique snap ID from backend.
+    id: String!
+    # Metadata of this story.
+    metadata: StoryMetadata!
+    # Story embed url.
+    embed_url: String!
+    # Snaps within this story.
+    snaps: [Snap]!
+}
+
+# The returned results are ordered by the specified orderType and paginated.
+type SearchStoriesResults {
+    # The list of snaps returned. The list can be empty when no more snap is
+    # available.
+    stories: [Story]!
+    # nextStoryOffset denotes where to start to fetch the next page with current
+    # search criteria. A nextStoryOffset of value -1 indicates there is no more
+    # record after the last snap returned in this call.
+    nextStoryOffset: Int!
+}
+
+enum SearchResultsOrderType {
+    # Sorts the results by creation time, in chronological order (oldest first).
+    CHRONOLOGICAL
+    # Sort the results by the reverse chronological order of creation time.
+    REVERSE_CHRONOLOGICAL
+    # Sorts the results by relevance (most relevant first).
+    RELEVANCE
+}
+
+input PagingInput {
+    # The starting index of the record among all the qualified records.
+    # Note that it's a zero-based index.
+    offset: Int!
+    # The total number of records the caller expects to get with this call.
+    # Note that the count is not guaranteed; the remaining number of
+    # records could be less than the specified count, or the count could
+    # exceed the server's limitation on the max number of records allowed to
+    # be returned with one response.
+    count: Int!
+}
+
+# Geo Filter Type
+enum GeoFilterType {
+    CIRCLE
+    BOUNDINGBOX
+    POLYGON
+}
+
+# Geo Filter Input. Must fill the selected type. Others will be ignored
+input GeoFilterInput {
+    geotype: GeoFilterType!
+    circle: GeoCircleInput,
+    boundbox: GeoBoundingBoxInput,
+    polygon:  GeoPolygonInput,
+}
+
+type Query {
+    # Searches Snaps that meet the specified requirements.
+    SearchSnaps(
+        # The geo filter that the returned Snaps must fall into.
+        geo_filter: GeoFilterInput,
+        # The content filter that the Snap should meet. This is a
+        # loose requirement. The resulting Snaps can be ranked by relevance.
+        content:[ContentFilterInput],
+        # The time range that the Snap creation time must fall into. Every record
+        # in the results must meet this piece of criteria.
+        time_range: TimeRangeFilterInput,
+        # The media format filter that the Snap needs to meet.
+        media_format_filter: MediaFormatFilterInput,
+        # The ordering type that determines the order of the Snap records.
+        order: SearchResultsOrderType!,
+        # Pagination argument for fetching paginated results.
+        paging: PagingInput!
+    ): SearchSnapsResults!
+
+    # Searches Stories that meet the specified requirements.
+    SearchStories(
+        # The geo filter that the returned Snaps must fall into.
+        geo_filter: GeoFilterInput,
+        # The content filter that the Snap should meet. This is a
+        # loose requirement. The resulting Snaps can be ranked by relevance.
+        content:[ContentFilterInput],
+        # The time range that the Snap creation time must fall into. Every record
+        # in the results must meet this piece of criteria.
+        time_range: TimeRangeFilterInput,
+        # The media format filter that the Snap needs to meet.
+        media_format_filter: MediaFormatFilterInput,
+        # The ordering type that determines the order of the Snap records.
+        order: SearchResultsOrderType!,
+        # Pagination argument for fetching paginated results.
+        paging: PagingInput!
+    ): SearchStoriesResults!
+
+    # Searches Stories that meet the specified requirements.
+    SearchUserStories(
+        # User name to search for.
+        user_name: String!,
+        # Caption to search for.
+        caption: String,
+        # The time range that the Snap creation time must fall into. Every record
+        # in the results must meet this piece of criteria.
+        time_range: TimeRangeFilterInput,
+        # The media format filter that the Snap needs to meet.
+        media_format_filter: MediaFormatFilterInput,
+        # The ordering type that determines the order of the Snap records.
+        order: SearchResultsOrderType!,
+        # Pagination argument for fetching paginated results.
+        paging: PagingInput!
+    ): SearchStoriesResults!
+}
