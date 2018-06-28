@@ -7,5 +7,6 @@
 # Install dependencies
 npm install
 # Run Example
+## Update your `iss` and `kid` in the `config.js` file
 npm run example
 ```
