@@ -1,7 +1,7 @@
 # Public Story API GraphQL Schema
 
 schema {
-  query: Query
+    query: Query
 }
 
 
@@ -97,13 +97,6 @@ type Media {
     media_type: MediaType!
     orientation_type: OrientationType!
     camera_position: CameraPositionType!
-    # URL for downloading media content. For image, use jpg or png. For video, use mp4.
-    media_url: String!
-    # URL for downloading overlay image.
-    overlay_image_url: String!
-    # URL for downloading the first frame of video content. This field is not
-    # applicable for images.
-    media_preview_url: String!
     # Duration of the Snap video in seconds. This field is not applicable for images.
     duration_secs: Int!
 }
@@ -176,10 +169,8 @@ type StoryMetadata {
     emoji: String!
     # Story timestamp to display on the UI.
     display_timestamp_secs : Int!
-    # Image thumbnail. Media type is IMAGE.
-    image_thumbnail: Media!
-    # Video thumbnail. Media type is VIDEO_NO_SOUND. Optional.
-    video_thumbnail: Media!
+    # Image thumbnail url.
+    image_thumbnail_url: String!
     # The weighted centroid geo point of the story. This might not be meaningful
     # for certain types of Stories, e.g. truly global topic Stories.
     location: GeoPoint!
