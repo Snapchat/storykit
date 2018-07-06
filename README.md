@@ -30,7 +30,9 @@ The Story Kit API only accepts HTTP POST requests that carry the query in the re
 
 #### 1. Construct a [GraphQL](https://graphql.org/ "GraphQL") query.
 
-The Story Kit API is [GraphQL](https://graphql.org/ "GraphQL") based. For details, see the GraphQL schema defined in [public_story_api.graphql](gqlschema/public_story_api.graphql).
+The Story Kit API is [GraphQL](https://graphql.org/ "GraphQL") based. For details, see the GraphQL 
+
+defined in [public_story_api.graphql](gqlschema/public_story_api.graphql).
 
 To construct the query body, use whichever [GraphQL client libraries](https://graphql.org/code/#graphql-clients "GraphQL client libraries") you prefer.
 
@@ -103,5 +105,5 @@ Try it out with the beta test endpoint: `https://kit.snap-dev.net/v1/stories/pub
 
 #### Example Code
 
-Need an example? Check out the Node.js example in client_example folder
+Need an example? Check out the [Node.js example](client_example/javascript) in client_example folder
 
