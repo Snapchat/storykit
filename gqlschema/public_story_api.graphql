@@ -47,6 +47,9 @@ enum ContentFilterType {
     # Finds Stories containing terms in fields related to location name
     # (example: city name or country code).
     LOCATION
+    # Finds Stories containing terms in fields related to lense id. Only one
+    # lense id is allowed per filter.
+    LENS
 }
 
 # Keyword of named source filter input type.
@@ -239,6 +242,10 @@ input GeoFilterInput {
 
 type Query {
     # Searches Snaps that meet the specified requirements.
+    # All filters are combined with AND-condition, while repeated ContentFilterInput
+    # are combined with OR-condition. For example,
+    # {ContentFilterInput A, ContentFilterInput B, GeoFilterInput G, TimeRangeFilterInput T}
+    # becomes ((A or B) and G and T).
     SearchSnaps(
         # The geo filter that the returned Snaps must fall into.
         geo_filter: GeoFilterInput,
@@ -257,6 +264,10 @@ type Query {
     ): SearchSnapsResults!
 
     # Searches Stories that meet the specified requirements.
+    # All filters are combined with AND-condition, while repeated ContentFilterInput
+    # are combined with OR-condition. For example,
+    # {ContentFilterInput A, ContentFilterInput B, GeoFilterInput G, TimeRangeFilterInput T}
+    # becomes ((A or B) and G and T).
     SearchStories(
         # The geo filter that the returned Snaps must fall into.
         geo_filter: GeoFilterInput,
@@ -275,6 +286,9 @@ type Query {
     ): SearchStoriesResults!
 
     # Searches Stories that meet the specified requirements.
+    # All filters are combined with AND-condition.
+    # For example, {TimeRangeFilterInput A, MediaFormatFilterInput B}
+    # becomes (A and B).
     SearchUserStories(
         # User name to search for.
         user_name: String!,
