@@ -47,6 +47,9 @@ enum ContentFilterType {
     # Finds Stories containing terms in fields related to location name
     # (example: city name or country code).
     LOCATION
+    # Finds Stories containing terms in fields related to lense id. Only one
+    # lense id is allowed per filter.
+    LENS
 }
 
 # Keyword of named source filter input type.

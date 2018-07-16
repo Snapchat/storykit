@@ -26,8 +26,32 @@ const SearchSnapsWithOffset = async () => {
   }
 };
 
+const SearchSnapsWithLensFilter = () => (
+  Request.run(
+    GQL.SearchSnapsWithLensFilter.query,
+    GQL.SearchSnapsWithLensFilter.variables,
+  )
+);
+
+const SearchStoriesWithGeoFilter = () => (
+  Request.run(
+    GQL.SearchStoriesWithGeoFilter.query,
+    GQL.SearchStoriesWithGeoFilter.variables,
+  )
+);
+
+const SearchUserStories = () => (
+  Request.run(
+    GQL.SearchUserStories.query,
+    GQL.SearchUserStories.variables,
+  )
+);
+
 const run = async () => {
   await SearchSnapsWithGeoFilter();
   await SearchSnapsWithOffset();
+  await SearchSnapsWithLensFilter();
+  await SearchStoriesWithGeoFilter();
+  await SearchUserStories();
 };
 run();

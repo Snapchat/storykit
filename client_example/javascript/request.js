@@ -72,7 +72,6 @@ const run = (query, variables) => {
   })
     .then((response) => {
       console.log(JSON.stringify(response.data, null, 2));
-      console.log(`return snaps #${response.data.data.SearchSnaps.snaps.length}`);
       return response.data;
     })
     .catch((error) => {
