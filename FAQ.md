@@ -1,6 +1,6 @@
 # Story Kit API FAQ
 
-The Story Kit API is defined by [GraphQL Schema](https://github.com/Snapchat/storykit/blob/master/gqlschema/public_story_api.graphql).
+The Story Kit API is defined by our [GraphQL schema](gqlschema/public_story_api.graphql).
 
 ## What kind of Snaps does the Story Kit API serve?
 
@@ -19,22 +19,24 @@ The Story Kit API serves all **Our Stories** and **Official Stories**. In the AP
 We hide some of the fields to protect user privacy. For example, we hide `display_name` from Our Story results. In My Story results, city and state information is hidden from the `title` field.
 
 ## Can we get a collection of related Stories based on any criteria?
-Out of the Snaps posted to Our Story and My Story, we build two kinds of collection of Stories:
+From the Snaps posted to Our Story and My Story, we build two kinds of collection of Stories:
 
 **Per-user**: A collection of Stories a particular user posts to My Story. These Stories live for 24 hours, with location information hidden.
 
-**Per-feature**: A collection of Stories posted to Our Story that share a particular feature, like topic or location. The Stories live for 90 days, and personally identifiable information is hidden. 
+**Per-feature**: A collection of Stories posted to Our Story that share a particular feature, like topic or location. The Stories live for 90 days, and personally identifiable information is hidden.
 
-Note that the above collection of stories does not represent the entire pool of Snaps available via the Snap Kit API. These collected Stories are limited subsets of all the Snaps. To surface all the available Snaps in the Story Kit API, please use the `SearchSnaps` query.
+Note that the above collection of Stories does not represent the entire pool of Snaps available via the Snap Kit API. These collected Stories are limited subsets of all the Snaps. To surface all the available Snaps in the Story Kit API, please use the `SearchSnaps` query.
 
-## What kind of contents do API queries surface?
-Story Kit API queries listed in [public_story_api.graphql](https://github.com/Snapchat/storykit/blob/master/gqlschema/public_story_api.graphql), and their results are:
+## What kinds of content do API queries surface?
+You can query for different kinds of content:
 
-`SearchSnaps` searches for both Our Story Snaps and My Story Snaps.
+`SearchSnaps` searches for matching Stories posted to Our Story or My Story.
 
-`SearchStories` searches for collection of Stories.
+`SearchStories` searches for matching Stories in Snapchat's curated Story collections. The only difference here is that we've done some of the categorizing for you already and hidden certain PII.
 
-`SearchUserStories` searches for per-user collection of Stories.
+`SearchUserStories` searches for matching Stories in Snapchat's per-user collection only.
+
+You can see the up-to-date list of possible queries in [public_story_api.graphql](gqlschema/public_story_api.graphql) at any time.
 
 ## map.snapchat.com shows location-based Snaps. Can we get similar Stories based on the geo location?
 
@@ -51,9 +53,10 @@ Currently, we do not provide the list of popular locations.
 ## Can we get a list of currently trending locations so that we can easily search by location using `GeoFilterInput`?
 
 Currently, we do not provide the list of locations trending now.
+
 ## Can we get media download link?
 
-Instead of a media download link, Story Kit API provides an embed link:
+Instead of a media download link, Story Kit API provides an embed link (please adjust ```a_url_suffix``` to what is in the API response):
 
 ```<iframe width="270" height="480" style="max-width: 100%; max-height: 100%;" frameborder="0" src="https://play.snapchat.com/a_url_suffix></iframe>```
 
