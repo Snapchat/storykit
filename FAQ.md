@@ -1,13 +1,13 @@
 # Story Kit API FAQ
 
-The Story Kit API is defined by our [GraphQL schema](gqlschema/public_story_api.graphql).
+The Story Kit API is defined by our [GraphQL schema](https://github.com/Snapchat/storykit/blob/master/gqlschema/public_story_api.graphql).
 
 ## What kind of Snaps does the Story Kit API serve?
 
 Regular Snaps are private, but a lot of Snaps are for everyone to see. The Story Kit API serves only these *non-private* Snaps from Snapchatters. There are two types of non-private Snaps — we call them *Stories*:
 
 #### [Our Story](https://support.snapchat.com/en-US/a/our-story)
-When a Snapchatter posts to Our Story, the Snap lives publicly for 90 days. Snapchat attaches location information (lat/lng, city, or country) to Our Stories — but any personally identifiable information (PII) is hidden to protect user privacy.
+When a Snapchatter posts to Our Story, the Snap lives publicly for 90 days. Snapchat attaches location information (lat/lng, city, or country) to Our Stories — but the Snaps are not attributed.
 
 #### [My Story](https://support.snapchat.com/en-US/article/my-story)
 The Story Kit API currently supports *Official Stories*, which are My Stories posted by a verified celebrity. When a Snapchatter posts a Story and sets their sharing setting to *Everyone*, its lifespan is 24 hours. In this case, the username and display name are attached, but location information is hidden. We plan to expand this to our full My Story corpus, which includes *Popular* and *Public User* Stories.
@@ -36,7 +36,7 @@ You can query for different kinds of content:
 
 `SearchUserStories` searches for matching Stories in Snapchat's per-user collection only.
 
-You can see the up-to-date list of possible queries in [public_story_api.graphql](gqlschema/public_story_api.graphql) at any time.
+You can see the up-to-date list of possible queries in [public_story_api.graphql](https://github.com/Snapchat/storykit/blob/master/gqlschema/public_story_api.graphql) at any time.
 
 ## map.snapchat.com shows location-based Snaps. Can we get similar Stories based on the geo location?
 
@@ -76,7 +76,7 @@ We support pagination to explore long results, but our service does not offer in
 
 ## Is there any maximum value of `radius_in_meters`?
 
-We have no predefined minimum or maximum value for `radius_in_meters`. However, radius values yield more useful results if they’re neither too specific nor too broad. If `radius_in_meters` is too small, it could unintentionally expose a user’s position. We return empty results for queries with very specific `radius_in_meters` values to protect user privacy. If `radius_in_meters` is too large, the resulting Snaps will cut off at around 500. This means only a subset of Stories in that geo will show up. To see richer results, try decreasing your geo radius.
+We have no predefined minimum or maximum value for `radius_in_meters`. However, radius values yield more useful results if they’re neither too specific nor too broad. If `radius_in_meters` is too small, we return empty results for queries to help protect user privacy. If `radius_in_meters` is too large, the resulting Snaps will cut off at around 500. This means only a subset of Stories in that geo will show up. To see richer results, try decreasing your geo radius.
 
 ## What should be the shape of the geo polygon?
 
@@ -101,3 +101,4 @@ Searchable terms are categorized by caption, user, and location.
 `LOCATION`: City name or country code are available for searching for Our Story Snaps.
 
 `ANY`: Searches the query terms against any of `CAPTION`, `USER`, and `LOCATION`. Returns a Snap if the query term matches at least one of these filters.
+
