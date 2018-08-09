@@ -239,6 +239,24 @@ input GeoFilterInput {
     polygon:  GeoPolygonInput,
 }
 
+# User's name and recent activity info.
+type User {
+    # Name of the user.
+    userName: String!
+    # User's latest post time in epoch seconds.
+    latestPostEpochTime: Int!
+}
+
+# The returned results of GetActiveUsers query.
+type GetActiveUsersResults {
+    # The list of active users returned.
+    users: [User]!
+    # nextUserOffset denotes where to start to fetch the next page with current
+    # search criteria. A nextUserOffset of value -1 indicates there is no more
+    # record after the last user returned in this call.
+    nextUserOffset: Int!
+}
+
 type Query {
     # Searches Snaps that meet the specified requirements.
     # All filters are combined with AND-condition. For example,
@@ -301,4 +319,10 @@ type Query {
         # Pagination argument for fetching paginated results.
         paging: PagingInput!
     ): SearchStoriesResults!
+
+    # Get users who were active within the past 24 hrs.
+    GetActiveUsers(
+        # Pagination argument for fetching paginated results.
+        paging: PagingInput!
+    ): GetActiveUsersResults!
 }
