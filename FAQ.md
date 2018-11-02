@@ -68,7 +68,7 @@ The definition of *interesting* Snaps depends on your application. Story Kit API
 
 ## How much rate limiting will be enforced?
 
-We implement rate limiting to support organic query streams while protecting the server from abuse, based on the volume of the results and the number of requests. We will communicate with you before enforcing the rate limit.
+Rate limiting helps us support organic query streams while protecting the server from abuse. We enforce rate limiting when the number of Snaps or Stories returned in your organization is excessive. Rates are capped to 3,000 Snaps or Stories per minute for each organization. If you exceed that cap, we stop returning results for 1 to 5 minutes, depending on how much your organization has exceeded the rate-limiting cap. The higher the number of excessive queries, the longer the time penalty.
 
 ## How many results can we get for a query?
 
@@ -101,4 +101,3 @@ Searchable terms are categorized by caption, user, and location.
 `LOCATION`: City name or country code are available for searching for Our Story Snaps.
 
 `ANY`: Searches the query terms against any of `CAPTION`, `USER`, and `LOCATION`. Returns a Snap if the query term matches at least one of these filters.
-
