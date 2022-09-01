@@ -10,9 +10,9 @@ Browse this repo for guidance on using the Story Kit API.
 
 ### Create an ESDSA key pair
 1. Create the private key:
-`$ openssl ecparam -name prime256v1 -genkey -noout -out private-key.pem`
+`$ openssl ecparam -name prime256v1 -genkey -noout -out private_key.pem`
 2. From your private key, create the public key:
-`$ openssl ec -in private-key.pem -pubout -out public-key.pem`
+`$ openssl ec -in private_key.pem -pubout -out public_key.pem`
 
 ### Send the public key to your Snap advocate
 Your advocate at Snap will assign an `iss` and a`kid` to you:
